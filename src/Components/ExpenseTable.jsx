@@ -1,6 +1,6 @@
 import React from "react";
-import expenseData from "../expenseData";
-export default function ExpenseTable() {
+export default function ExpenseTable(props) {
+  const expenseData = props.expenses;
   return (
     <table className="expense-table">
       <thead>
@@ -44,10 +44,10 @@ export default function ExpenseTable() {
       <tbody>
         {expenseData.map((expense) => {
           return (
-            <tr>
+            <tr key={expense.id}>
               <td>{expense.title}</td>
               <td>{expense.category}</td>
-              <td>{expense.amount}</td>
+              <td>₹{expense.amount}</td>
             </tr>
           );
         })}
