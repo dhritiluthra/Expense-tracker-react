@@ -14,7 +14,7 @@ export default function Select({
     <div className="input-container">
       <label htmlFor={id}>{label}</label>
       <select id={id} name={name} value={value} onChange={onChange}>
-        <option value="" disabled hidden>
+        <option value="" defaultValue={placeholder}>
           {placeholder}
         </option>
 

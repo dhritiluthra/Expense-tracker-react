@@ -2,32 +2,32 @@ import React, { useState } from "react";
 import Input from "./Input";
 import Select from "./Select";
 
-export default function ExpenseForm({ setExpenses }) {
+export default function ExpenseForm({
+  setExpenses,
+  newExpense,
+  setNewExpense,
+  editingRowId,
+  setEditingRowId
+}) {
   console.log("Rendering ExpenseForm");
-  const [newExpense, setNewExpense] = useState({
-    title: "",
-    category: "",
-    amount: "",
-    email: "",
-  });
 
   const validationConfig = {
     title: [
       { required: true, message: "Please enter title." },
-      { minLength: 5, message: "Title cannot be more than 5 characters." },
+      { minLength: 15, message: "Title cannot be more than 15 characters." },
     ],
     category: [{ required: true, message: "Please enter category." }],
     amount: [
       { required: true, message: "Please enter amount." },
       { numeric: true, message: "Only numbers are allowed." },
     ],
-    email: [
-      { required: true, message: "Please enter email." },
-      {
-        pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: "Please enter a valid email.",
-      },
-    ],
+    // email: [
+    //   { required: true, message: "Please enter email." },
+    //   {
+    //     pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    //     message: "Please enter a valid email.",
+    //   },
+    // ],
   };
 
   const [errorMsg, setErrorMsg] = useState("");
@@ -46,8 +46,8 @@ export default function ExpenseForm({ setExpenses }) {
 
     Object.entries(formData).forEach(([key, val]) => {
       console.log(key); // key = "title" | "category" | "amount"
-      validationConfig[key].some((rule) => {
-        if (rule.required && !val.trim()) {
+      validationConfig[key]?.some((rule) => {
+        if (rule.required && !String(val).trim()) {
           errors[key] = rule.message;
           return true;
         }
@@ -76,19 +76,33 @@ export default function ExpenseForm({ setExpenses }) {
     e.preventDefault();
     const newAdded = { ...newExpense, id: crypto.randomUUID() };
 
-    if (Object.keys(validate(newExpense)).length === 0) {
-      //=> no errors
-      setExpenses((prevState) => {
-        return [...prevState, newAdded];
-      });
-      //reset the controlled inputs
-      setNewExpense({
-        title: "",
-        category: "",
-        amount: "",
-        email: "",
-      });
+    if (Object.keys(validate(newExpense)).length) return; //errors encountered
+
+    if(editingRowId){
+      //use map to edit
+      setExpenses((prevState)=>{
+        return prevState.map((exp)=>{
+          if(exp.id === editingRowId){
+            return newExpense
+          }
+          return exp;
+        })
+      })
+
+      setEditingRowId('');
     }
+    else{
+      setExpenses((prevState) => {
+      console.log(prevState);
+      return [...prevState, newAdded];
+    });
+    }
+     setNewExpense({
+      title: "",
+      category: "",
+      amount: "",
+      // email: "",
+    });
   };
 
   return (
@@ -122,15 +136,17 @@ export default function ExpenseForm({ setExpenses }) {
           onChange={handleOnChange}
           error={errorMsg.amount}
         />
-        <Input
+        {/* <Input
           label="Email"
           id="email"
           name="email"
           value={newExpense.email}
           onChange={handleOnChange}
           error={errorMsg.email}
-        />
-        <button className="add-btn button">Add</button>
+        /> */}
+        <button className="add-btn button">
+          {editingRowId ? "Save" : "Add"}
+        </button>
       </form>
     </main>
   );
