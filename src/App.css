@@ -49,10 +49,12 @@ main {
 .arrow {
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
+    color:whitesmoke;
 }
 
 .up-arrow {
     margin-left: auto;
+    color:whitesmoke;
 }
 
 .up-arrow:active {
@@ -61,6 +63,7 @@ main {
 
 .down-arrow {
     margin-left: 6px;
+    color:whitesmoke;
 }
 
 .down-arrow:active {
@@ -144,6 +147,14 @@ button:focus-visible {
   text-align: center;
   position:absolute;
   top: 100%;
+}
+.amount-heading{
+  display: flex;
+  justify-content: space-between;
+}
+
+.clear-sort{
+  cursor: pointer;
 }
 
 @media (max-width: 900px) {
