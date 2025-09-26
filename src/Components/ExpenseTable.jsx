@@ -22,24 +22,9 @@ export default function ExpenseTable({
   });
 
   const [rowId, setRowId] = useState("");
-  const sortAmountDesc = (e) => {
-    // e.stopPropagation();
-    setExpenseData((prevState) => {
-      return [...prevState].sort((a, b) => {
-        return b.amount - a.amount;
-      });
-    });
-  };
-
-  const sortAmountAsc = (e) => {
-    console.log("inside sort");
-    // e.stopPropagation();
-    setExpenseData((prevState) => {
-      return [...prevState].sort((a, b) => {
-        return a.amount - b.amount;
-      });
-    });
-  };
+  const [sortCallback, setSortCallback] = useState(() => {
+    return () => {};
+  });
 
   return (
     <>
@@ -64,7 +49,37 @@ export default function ExpenseTable({
       >
         <thead>
           <tr>
-            <th>Title</th>
+            <th className="title-column" >Title 
+              <span
+                    className="material-symbols-outlined arrow up-arrow"
+                    onClick={() => {
+                      setSortCallback(() => {
+                        return (a, b) => b.title.toLowerCase().localeCompare(a.title.toLowerCase());
+                      });
+                    }}
+                  >
+                    arrow_upward_alt
+                  </span>
+                  <span className="material-symbols-outlined arrow up-arrow"
+                  onClick={() => {
+                      setSortCallback(() => {
+                        return (a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+                      });
+                    }}>
+                    arrow_downward_alt
+                  </span>
+                  <span
+                    className="material-symbols-outlined clear-sort"
+                    title="Clear Sort"
+                    onClick={() => {
+                      setSortCallback(() => {
+                        return () => {};
+                      });
+                    }}
+                  >
+                    clear_all
+                  </span>
+            </th>
             <th>
               <select
                 onChange={(e) => {
@@ -85,24 +100,40 @@ export default function ExpenseTable({
                 <div>
                   <span
                     className="material-symbols-outlined arrow up-arrow"
-                    onClick={sortAmountDesc}
+                    onClick={() => {
+                      setSortCallback(() => {
+                        return (a, b) => b.amount - a.amount;
+                      });
+                    }}
                   >
                     arrow_upward_alt
                   </span>
-                  <span
-                    className="material-symbols-outlined arrow up-arrow"
-                    onClick={sortAmountAsc}
-                  >
+                  <span className="material-symbols-outlined arrow up-arrow"
+                  onClick={() => {
+                      setSortCallback(() => {
+                        return (a, b) => a.amount - b.amount;
+                      });
+                    }}>
                     arrow_downward_alt
                   </span>
-                  <span class="material-symbols-outlined clear-sort" title="Clear Sort">clear_all</span>
+                  <span
+                    className="material-symbols-outlined clear-sort"
+                    title="Clear Sort"
+                    onClick={() => {
+                      setSortCallback(() => {
+                        return () => {};
+                      });
+                    }}
+                  >
+                    clear_all
+                  </span>
                 </div>
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((expense) => {
+          {filteredData.sort(sortCallback).map((expense) => {
             return (
               <tr
                 key={expense.id}

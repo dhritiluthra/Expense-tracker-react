@@ -38,6 +38,12 @@ main {
     cursor: pointer;
 }
 
+.title-column{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .amount-column div {
     display: flex;
 }
