@@ -7,7 +7,7 @@ export default function ExpenseTable({
   setNewExpense,
   setEditingRowId,
 }) {
-  const [filteredData, setQuery] = useFilter(
+  const [filteredData, setQuery, query] = useFilter(
     expenseData,
     (data) => data.category
   );
@@ -85,6 +85,7 @@ export default function ExpenseTable({
                 onChange={(e) => {
                   setQuery(e.target.value);
                 }}
+                value={query}
               >
                 <option value="">All</option>
                 <option value="grocery">Grocery</option>

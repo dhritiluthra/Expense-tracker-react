@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { useLocalStorage } from "./useLocalStorage";
 
-export const useFilter = (datalist , callbackFunc) => {
+export const useFilter = (datalist, callbackFunc) => {
+  const [query, setQuery] = useLocalStorage("FilterQuery", "");
 
-  const [query, setQuery] =  useState('');
-
-  const filteredData =  datalist.filter((data) => {
+  const filteredData = datalist.filter((data) => {
     console.log(callbackFunc(data));
-    if ( callbackFunc(data).toLowerCase().includes(query?.toLowerCase())) {
+    if (callbackFunc(data).toLowerCase().includes(query?.toLowerCase())) {
       return true;
     }
     return false;
-  })
+  });
 
-  return [filteredData,setQuery];
+  return [filteredData, setQuery , query];
 };

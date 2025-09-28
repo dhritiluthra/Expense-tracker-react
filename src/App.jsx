@@ -4,16 +4,18 @@ import ContextMenu from "./Components/ContextMenu";
 import ExpenseForm from "./Components/ExpenseForm";
 import ExpenseTable from "./Components/ExpenseTable";
 import expenseData from "./expenseData";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 function App() {
-  const [expenses, setExpenses] = useState(expenseData);
-  const [newExpense, setNewExpense] = useState({
+  const [expenses, setExpenses] = useLocalStorage("expenseData",expenseData);
+  const [newExpense, setNewExpense] = useLocalStorage("ExpenseFieldInputs",{
     title: "",
     category: "",
     amount: "",
     // email: "",
   });
-  const [editingRowId, setEditingRowId] = useState("");
+  const [editingRowId, setEditingRowId] = useLocalStorage("editingRowId","");
+
   return (
     <div className="expense-tracker">
       <ExpenseForm
